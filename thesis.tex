@@ -1,0 +1,105 @@
+\documentclass[11pt,a4paper,oneside]{book}
+
+% ******************************** Packages ********************************
+\input{packages.tex}
+
+% ******************************** Commands ********************************
+\input{commands.tex}
+
+% ******************************** Front Matter ****************************
+\begin{document}
+
+\frontmatter
+
+\newenvironment{tight_enumerate}{
+\begin{enumerate}
+  \setlength{\itemsep}{0pt}  
+  \setlength{\parskip}{0pt}
+}{\end{enumerate}}
+
+\newenvironment{tight_itemize}{
+\begin{itemize}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+}{\end{itemize}}
+
+\newcommand{\wtf}[1]{{\color{red}#1}}
+
+\def\author{Samuele Ceol}
+\def\advisor{Barbara Russo}
+\def\date{March 2019}
+
+\def\tableheader{Continued from previous page}
+\def\tablefooter{Continues on next page}
+
+\begin{titlepage}
+
+  \begin{textblock}{20}(2,2)
+    \includegraphics[scale=1.16]{Images/logo.pdf}
+  \end{textblock}
+  
+  {\vspace*{100pt}\parindent0pt\large
+  
+  \begin{addmargin}[1.6cm]{-,5cm}
+  \textbf{}
+  
+  \vspace{2cm}
+  {\fontsize{15pt}{18pt}\hspace{-3pt}\selectfont\textbf{Bachelor in Computer Science and Engineering}}
+  \vspace{1,5cm}
+
+  {\fontsize{15pt}{18pt}\textbf{Bachelor Thesis}}
+  \vspace{0,5cm}
+
+  {\fontsize{23pt}{21pt}\textbf{Automated Testing in a Microsoft \newline Dynamics 365 Environment}}
+
+  \vspace{5cm}
+  \Large{\textbf{Candidate}: \author}
+
+  \vspace{1cm}
+  \textbf{Supervisor}: \advisor
+
+  \vspace{1cm}
+  
+  \date
+  
+  \end{addmargin} 
+  }
+
+\end{titlepage}
+
+% ***********************  Abstract and Acknowledgement ****************************
+\input{Chapters/acknowledgement}
+\input{Chapters/abstract}
+
+% ***********************  TOC and List of Figures *********************************
+\renewcommand{\lstlistingname}{Listing}
+\renewcommand{\lstlistlistingname}{List of Listings}
+
+\tableofcontents
+
+\listoftables
+
+\listoffigures
+
+% ******************************** Main Matter *************************************
+\mainmatter
+
+\input{Chapters/introduction}
+\input{Chapters/requirements.tex}
+\input{Chapters/related_work}
+\input{Chapters/product}
+\input{Chapters/process}
+\input{Chapters/evaluation}
+\input{Chapters/discussion}
+\input{Chapters/conclusion}
+
+% ******************************** Appendix ****************************************
+\appendix
+
+%\input{Chapters/appendix}
+
+% ******************************** Bibliography ************************************
+\bibliographystyle{unsrt}        
+\bibliography{References/references}
+
+\end{document}

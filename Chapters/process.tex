@@ -1,0 +1,74 @@
+\chapter{Process}
+
+%********************************** %First Section  **************************************
+\section{Diagnostic} 
+
+The idea of exploring the topic of testing in a Dynamics 365 for Finance and Operation environment was firstly introduced in order to compensate the lack of definition of a proper methodology to follow during the development of a project in order maintain high standards of quality and reliability. 
+At the beginning of this work we explained how the purpose of the Diagnostic phase was the creation of a project plan that would allow us to form an initial determination of the project requirements together with their scope and the amount of time to dedicate to each activity. This allowed us to better understand how many resources needed to be allocated for the completion of the project and gave us a tool to monitor to which degree we were able to respect the predefined timeline. In this section we will not provide further information regarding the structure of the plan (section 1.4.2) and the defined requirements (Chapter 2).
+
+A secondary activity was setting up the environment that would later be used to access the development tools. The company account was created and given access to the Trade+ project on Azure DevOps. A dev virtual machine was also set up and the Visual Studio Environment was connected to the project using Visual Studio Team Explorer.
+
+Relevant links were provided in order to access the Dynamics Learning Portal, Lifecycle Services, Microsoft Developers Network, the company Intranet and the Trade+ project portal.
+
+%********************************** %Second Section  **************************************
+\section{Analysis} 
+
+The identification of the activities that had to be covered by test cases was mainly based on finding a balance between the skills acquired since the beginning of the work and the usefulness of the tested tasks. As mentioned before (Section 1.4.2) we settled on five processes that had to be analyzed in order to have a satisfactory output (both in terms of coverage and documentation) at the end of the project. Said processes, together with steps that compose them, read as follows:
+
+\begin{itemize}
+    \item \textbf{Purchase Order}. Creation of new license plates to identify the purchased goods, creation of a new PO (with vendor and arrival site and warehouse), specification of items number and quantity, order confirmation, specification of order lines, baydoor registration, creation of product receipt (with id), posting of product receipt, invoice creation, invoice posting.
+    \item \textbf{Production Order}. Creation of PO (with item number, delivery date and quantity), validation of PO, update of BOM (bill of materials) and production route, estimation and cost management, scheduling/release/start of production, reporting of production as finished (with publishing of journal entry). 
+    \item \textbf{Transfer Order}. Creation of TO (with origin and target warehouse), specification of items number and quantity, inventory reservation, items picking from origin warehouse, items shipping to target warehouse, receival confirmation.
+    \item \textbf{Sales Order}. Moving items from receival area to storage (transfer journal), creation of a new SO (with customer account and origin site and warehouse), specification of items number and quantity, inventory reservation, release to warehouse (creation of work item), validation and completion of work, creation of shipping load, shipment.  
+    \item \textbf{Return Order}. Creation of RO (with customer account, return site and warehouse and return reason code), specification of items number and quantity, specification of order lines, baydoor registration.
+\end{itemize}
+
+After this initial definition we also decided that it would be appropriate (as a secondary step) not only to test the processes in isolation (feature testing) but also as single coherent workflow (integration testing) in which multiple tasks are interconnected with one another [Figure \ref{fig:processesWorkflow}]
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.7]{Images/SampleImage.pdf}
+	\caption{Processes workflow}
+	\label{fig:processesWorkflow}
+\end{figure}
+
+The Analysis phase was also characterized by a series of training activities (mentioned in section 1.3) that were organized in order to give a satisfactory introduction to the world of ERP application and naturally had a particular focus on the Dynamics suite. The "Introductory lectures for new hires" are carried out with regularity by the company and aim to form the new team members to the internal practices, policies and tools. During the first weeks the following lectures were organized: Introduction to Dynamics, look and feel of Dynamics 365, Sales and logistics, production, development process overview and introduction to Trade+. On the Dynamics Learning Portal we followed the set of lectures called "Development, Extensions and Deployment for Microsoft Dynamics 365 for Finance and Operations" (Exam MB6-894) that covered: The understanding of Dynamics 365 for Finance and Operations architecture (application stack, cloud components, server architecture, layers) and development environment (Visual Studio and Lifecycle Services), development of new elements (creation and management of data types, tables and labels), the X++ programming language, user interface and security and component extension. Additional (independent) lectures were also followed on the topics of: System architecture and technologies (80765BE), cloud deployment (81144AE), advanced security (80929BE) and DevOps testing/practices/principles (Steven Borg, Sam Guckenheimer).
+
+%********************************** %Third Section  **************************************
+\section{Design} 
+
+Dynamics 365 for Finance and Operations provides a easy-to-use tool (the Task Recorder) to record business processes and download them as .xml or .axtr files. The tool is integrated in the browser client and when activated records every user interaction with the system creating a step-by-step list of the performed actions. Each step appears to the user as a human readable, high level description of the action that has been performed (e.g. In the Warehouse field, type '6') and, once the recording file is downloaded, corresponds to a portion of the XML code that provides the system with information on the actions that have to be performed on the application. The recording process can be interrupted and resumed at any point and every created step can be commented (to provide further information to the users that will look at the interested recording), modified or deleted. A downloaded recording can be saved in the Lifecycle Service portal as a guide (.axtr), played back and edited by another user in his Dynamics environment (.axtr or .xml) and converted into a test case (.xml). The playback functionality is particularly useful to guide developers when a bug (that triggers after a series of specific actions) needs to be fixed. Because of this reason the recordings are usually created by consultants and attached to Azure Boards work items. Said items (as mentioned in section 4.2) are assigned to developers that can later download and use the attached recording file to emulate the interested behavior on their personal environment in order to better understand the problem without having to rely only on a written description of it.
+
+After an initial period, necessary in order to get accustomed with the tool, we started to plan the recording activities. A major focus during this phase was the reduction of the steps needed to cover the interested business processes. These "simplification" tasks were of particular importance to reduce the amount of code that a given recording would generate when converted into a coded test case. A shorter test case is easier to maintain, expand and modify. Furthermore superfluous steps would have increased the likelihood of unexpected errors and behaviors. Other than reducing the total number of steps we also made sure that each recording could be played back on any machine running the same version of Dynamics 365 for Finance and Operations, independently from the underlying status of the database at the start of the execution. This meant encompassing all the activities related with the creation of the needed data at the beginning (or during) the interested business process (e.g. If a license plate needs to be used, create it before using it). Some information (like the predefined item selected in a drop-down menu) is also saved locally by Dynamics 365 for Finance and Operations and depends on how the user has previously interacted with the system. This peculiarity had to be taken into consideration during the recording activities in order to create file that could be played back (and later executed) on any machine (e.g. make sure that each item in a form is explicitly defined during the recording, etc.). 
+
+Regarding the business processes covered in our work we decided to create a single recording for each activity, ending the Design phase with five .xml files that could later be utilized to create the foundation for our test cases. Another option that we considered was to cover all the core activities that needed to be tested in a single session. This approach would have resulted in the creation of a single recording file (and consequently in a single test case) thus simplifying the communication between the various business processes. Despite this fact, having a single test case would have greatly reduced the granularity that we would have during the execution of multiple test cases. Because of this reason this approach was later rejected.
+
+
+%********************************** %Fourth Section  **************************************
+\section{Development} 
+
+This section covers all the Development tasks that were carried out during the course of our work. We decided to organize it into three subsections corresponding to the different macro-activities of this phase (mentioned in section 1.4.2). Subsection 5.4.1 describes the creation of the project that hosted our code and the translation of the task recordings into coded test cases. Subsection 5.4.2 provides information regarding how said test have been expanded in order to fulfill the testing requirements of the application. Finally subsection 5.4.3 describes the process of integrating the test cases with the nightly builds.
+
+\subsection{Creation}
+
+As mentioned before (section 4.1) the handling of Dynamics 365 for Finance and Operations elements is done via a project that needs to be tied to a single model. Because of this reason, at the beginning of this phase, we decided to proceed with the creation of a new model that would contain all our test classes. This new model (called \textit{TradePlusTest}) was generated in his own package, hence following the \textit{Extension} technique, and referenced the three model of the application stack (Application Platform, Application Foundation and Application Suite) in order for the test cases to interact with the various application components and the \textit{TestEssentials} models containing all the methods and classes of the SysTest Framework (section 4.3).
+
+The .xml recordings were imported in the Visual Studio environment via the dedicated software utility that converted each recording into a X++ test case.  
+
+\subsection{Expansion}
+
+Lorem Ipsum
+
+\subsection{Build Integration}
+
+Lorem Ipsum
+
+%********************************** %Fifth Section  **************************************
+\section{Deployment}
+
+Lorem Ipsum
+
+%********************************** %Sixth Section  **************************************
+\section{Operation (Future Work)} 
+
+Lorem Ipsum
