@@ -52,16 +52,29 @@ Another important activity of this methodology is the definition of team roles. 
 \subsection{Structure}
 
 Given the relatively small scope of the project described in this work we decided to apply the principles and phases of SureStep but to ignore (or only partially pursue) certain specific activities that were typical of larger project and not applicable in this context. 
-The \textit{Diagnostic} phase started with the previously defined Kickoff meetings that allowed us to define a first version of the project timeline which contained deadlines and objectives of the various activities that had to be part of the project [Figure \ref{fig:projectPlan}].  During this first period the work environment was also set up. 
+The \textit{Diagnostic} phase started with the previously defined Kickoff meetings that allowed us to define a first version of the project timeline which contained expected activities and results of the various phases that had to be part of the project [Figure \ref{Tab:projectTimeline}].  During this first period the work environment was also set up. 
 In the \textit{Analysis} phase we identified the specific test requirements of the application by analyzing its core features. The result was the definition of the required test cases that (we decided) had to cover the following core business processes: Purchase order, transfer order, sales order, production order and return order. The training activities were also carried out during this period. 
 After this initial definition we started working (in the \textit{Design} phase) directly on the application by utilizing an integrated tool, called task recorder, that allowed us to record high level (step-by-step) user interaction with the system. Said interactions were saved as XML files that could be then imported on any machine running Trade+ in order to reproduce the recorded processes. At the end of this activity we ended up with a set of recordings covering the previously described business processes. 
 A built-in feature of the Visual Studio development environment allowed us to convert the task recordings into X++ coded test cases. This represented the starting point for the \textit{Development} phase. Once created, the test cases were expanded with tailored code specifically written to verify the expected behavior of the application under a wide array of different edge cases and scenarios that could exist within the covered processes. The creation of test cases "ex novo" (not starting from a pre-existing recording) was also taken into consideration as a secondary requirement but later ignored given the level of expertise and knowledge of the system that such a task would have required. This last period of was also dedicated to the integration of the developed test in the CI workflow (i.e. nightly builds). 
 In the context of this work, the \textit{Deployment} phase was reduced to a series of final meeting organized in order to communicate the project results and to hand-in the documentation containing the acquired know-how. 
 All the further testing related work that will be performed on the application in the future will be part of the \textit{Operation} phase.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale=0.7]{Images/SampleImage.pdf}
-	\caption{Project Timeline}
-	\label{fig:projectPlan}
-\end{figure}
+\begin{table}[]
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Phase (with calendar weeks)} & \textbf{Activity}                                                              & \textbf{Result}                                                               \\ \hline
+    \textbf{Diagnostic (40)}             & \begin{tabular}[c]{@{}l@{}}Deadlines and Objectives \\ definition\end{tabular} & Project timetable                                                             \\
+                                         & Environment Setup                                                              & \begin{tabular}[c]{@{}l@{}}Working Dev. \\ Environment\end{tabular}           \\ \hline
+    \textbf{Analysis (41-42)}            & \begin{tabular}[c]{@{}l@{}}Test requirements \\ identification\end{tabular}    & \begin{tabular}[c]{@{}l@{}}List of covered \\ business processes\end{tabular} \\
+                                         & Training                                                                       & Application knowledge                                                         \\ \hline
+    \textbf{Design (43-45)}              & \begin{tabular}[c]{@{}l@{}}Business processes \\ recording\end{tabular}        & Set of recording files                                                        \\ \hline
+    \textbf{Development (46-52)}         & Test cases creation                                                            & Set of generated test cases                                                   \\
+                                         & Test cases expansion                                                           & Set of expanded test cases                                                    \\
+                                         & Build integration                                                              & Test cases in nightly builds                                                  \\ \hline
+    \textbf{Deployment (1-3)}            & Know-how sharing                                                               & Documentation                                                                 \\ \hline
+    \textbf{Operation}                   & Future work                                                                    &                                                                               \\ \hline
+    \end{tabular}
+    
+    \caption{Project Timeline}
+    \label{Tab:projectTimeline}
+\end{table}
