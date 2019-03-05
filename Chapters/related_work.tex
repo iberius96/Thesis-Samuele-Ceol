@@ -8,12 +8,12 @@ Finally, Automation gives some background information regarding the notion of \t
 %********************************** %First Section  **************************************
 \section{Product} 
 
-Jenkins \cite{JenkinsGuide} is a java-based, open-source software initially created in order to automate the building and testing stages of the development process. The extreme flexibility of the tool made it adaptable to a very wide range of requirements such as version control, code quality monitoring, testing, build automation, etc.
+Jenkins \cite{JenkinsGuide} is a java-based, open-source software originally created to automate the building and testing stages of the development process. The extreme flexibility of the tool made it adaptable to a very wide range of requirements such as version control, code quality monitoring, testing, build automation, etc.
 The tool can be extended with the thousands of available open source plugins that that allow the implementation (and automation) of various DevOps tools and techniques. In this context Jenkins is seen as an \textit{orchestrator} tool.
-Given its flexibility, Jenkins is primarily used to support Continuous Integration and Continuous Delivery approaches. Continuous Deployment is also achievable but often times more conservative procedures (such as a manual one-click deployment) are preferred by companies in order to have direct control over the process. A suite of related plugins that enables the use of CI/CD techniques is called a Jenkins Pipeline [Figure \ref{fig:jenkinsPipeline}]. Said pipelines are fundamentally a series of repeatable interlinked steps that may allow changes in the code to be automatically deployed. 
+Given its flexibility, Jenkins is primarily used to support Continuous Integration and Continuous Delivery approaches. Continuous Deployment is also achievable but often times more conservative procedures (such as a manual one-click deployment) are preferred by companies in order to have direct control over the process. A suite of related plugins that enables the use of CI/CD techniques is called a Jenkins Pipeline \cite{JenkinsBook}. Said pipelines [Figure \ref{fig:jenkinsPipeline}] are fundamentally a series of repeatable interlinked steps that may allow changes in the code to be automatically deployed. 
 This chain of operations provides various benefits such as: Grouping of  multiple activities into clearly defined stages (if one of such stages fails, the process is interrupted), clear visibility of all aspects of the process and immediate feedback when problems arise.
 Jenkins pipelines are composed by two kind of elements: \textit{stages} and \textit{steps}. A step is a minimal operation that tells the software to perform an action (like executing a script). A stage is a group of logically related sub-tasks (like building, testing, etc.). A machine executing a pipeline is called a \textit{Node}. Pipelines can be written directly in Jenkins or can be created in text files called \textit{JenkinsFile} where the single steps are defined.
-Benefits of using said files include prevention of data loss (pipelines definitions are stored in the repository), code quality improvement (through code reviews) and security (access restrictions are the same as the ones used for the source code). The syntax used in these files may be declarative or scripted.
+Benefits of using said files include prevention of data loss (pipelines definitions are stored in the repository), code quality improvement (through code reviews) and security (access restrictions are the same as the ones used for the source code).
 
 
 \begin{figure}[ht]
@@ -23,6 +23,8 @@ Benefits of using said files include prevention of data loss (pipelines definiti
 	\label{fig:jenkinsPipeline}
 \end{figure}
 
+We will later see how a similar approach to pipelines (in the context of an Azure DevOps environment) will be used in order to enforce regression testing techniques on the Trade+ application.
+
 %********************************** %Second Section  **************************************
 \section{Process} 
 
@@ -31,6 +33,8 @@ In the context of BDD, system specification are defined in a way that provides a
 BDD is started with the identification of the expected (or desired) behaviors of the application, which are then translated into a set of features. From this features, user stories (that describe the interaction between user and system) are created together with their related scenarios (specific instances of a user story). The language used to present this scenarios allows to turn their (high level) description into executable specifications that will act as \textit{acceptance tests} that verify the behavior of the system (behavioral testing). This process is made possible by mapping each step of a scenario to specific portion of code that can then be executed as part of the acceptance test.
 BDD also focuses on the readability of code which is seen as part of the project documentation. Because of this reason classes and methods names are usually self explanatory and allow the reader to understand what a specific portion of the code does without the need of additional information (this characteristic also affects the name and structure of unit tests).
 Being an highly collaborative procedure (in which information regarding the system specifications are shared in plain English, or any other language of choice), BDD requires a way to define feature and scenarios while still maintaining a sufficient level of automation. A tool commonly used to implement such procedures is \textit{Cucumber} \cite{Cucumber}. Cucumber is a command-line tool that takes plain language text files (called \textit{feature files}), analyses them and runs them against the system. These files represent the previously mentioned executable specifications that tell the system \textit{what} to do. The features are described by concrete examples that use a common vocabulary understood by all parties. Said files are written using a syntax called \textit{Gherkin}. Gherkin enables software to derive meaning from plain language files by using a series of specific keywords. A Gherkin file [Algorithm \ref{alg:featureWithScenario}] is organized into:
+
+\enlargethispage{-\baselineskip}
 
 \begin{enumerate}
   \item \textit{Feature}. To give some initial documentation regarding the purpose of the document.
@@ -44,8 +48,7 @@ Being an highly collaborative procedure (in which information regarding the syst
   Each line of the scenario is known as a \textit{step}. Multiple steps can be concatenated using the keywords \textit{and} and \textit{but}.
 \end{enumerate}
 
-\begin{algorithm}[H]
-\SetAlgoLined
+\begin{algorithm}[ht]
 \textbf{Feature}: Transfer Order\;
     \hspace{5mm} \textbf{Scenario}: Attempt a transfer without items\;
         \hspace{10mm} \textbf{Given} I have 0 Items in Warehouse\;
@@ -54,7 +57,6 @@ Being an highly collaborative procedure (in which information regarding the syst
 \caption{A Feature with Scenario}
 \label{alg:featureWithScenario}
 \end{algorithm}
-
 
 \textit{Step definitions} are portion of code that provide meaning to each feature step and that allow feature files to be executed. They are written in Ruby and tell the system \textit{how} to do something. All this definitions are usually bundled together in a single file. Cucumber scans the feature files looking for familiar patterns in order to map each step to the corresponding function declared in the step definition file. When a familiar pattern is found the associated code is executed. 
 %********************************** %Third Section  **************************************
@@ -69,13 +71,6 @@ Continuous Integration \cite{CI} is a development practice that revolves around 
 	\label{fig:CI}
 \end{figure}
 
-Although a successful build may already indicate some level of quality in the interested code, additional steps can be taken to further improve code reliability. Despite not being strictly a part of CI, continuous testing \cite{CT} is usually at least considered within the scope of such techniques and allows (thanks to the funtionalities offered by the CI server) the employment of various testing procedures, including (but not limited to):
+Although a successful build may already indicate some level of quality in the interested code, additional steps can be taken to further improve code reliability. Despite not being strictly a part of CI, continuous testing \cite{CT} is usually at least considered within the scope of such techniques and allows (thanks to the funtionalities offered by the CI server) the employment of various testing procedures, including (but not limited to): \textit{Smoke testing} (of the core product functionalities), \textit{unit testing} (of individual units like functions, subroutines or methods), \textit{integration testing} of multiple software units components interacting with each other that are tested to work as group and acceptance testing (of the required usage scenarios to the determine to which degree the application meets the specified requirements).
 
-\begin{itemize}
-    \item Smoke Testing of the core product functionalities.
-    \item Unit Testing of individual components (units) like functions, subroutines or methods. 
-    \item Integration Testing of multiple software units (or components) interacting with each other that are tested to work as group.
-    \item Acceptance Testing of the required usage scenarios to the determine to which degree the application meets the specified requirements.
-\end{itemize}
-
-The main advantage brought by the employment of CI techniques is naturally the automation of a series of processes that, if executed manually, would introduce the possibility of human error and be very time (and resource) consuming or even impossible to implement effectively during the whole development process. 
+Naturally, the main advantage brought by the employment of CI techniques is the automation of a series of processes that, if executed manually, would introduce the possibility of human error and be very time (and resource) consuming or even impossible to implement effectively during the whole development process. 

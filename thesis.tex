@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,oneside]{book}
+\documentclass[10pt,a4paper,twoside]{book}
 
 % ******************************** Packages ********************************
 \input{packages.tex}
@@ -68,15 +68,18 @@
 \end{titlepage}
 
 % ***********************  Abstract and Acknowledgement ****************************
+
 \input{Chapters/acknowledgement}
+\blankPage
 \input{Chapters/abstract}
+\blankPage
 
 % ***********************  TOC and List of Figures *********************************
 \renewcommand{\lstlistingname}{Listing}
 \renewcommand{\lstlistlistingname}{List of Listings}
 
 \tableofcontents
-
+\blankPage
 \listoffigures
 \begingroup
 \let\clearpage\relax
@@ -86,17 +89,15 @@
 % ******************************** Main Matter *************************************
 \mainmatter
 
-\shipout\null
-
 \input{Chapters/introduction}
 \input{Chapters/requirements.tex}
+\blankPage
 \input{Chapters/related_work}
 \input{Chapters/product}
 \input{Chapters/process}
-
 \input{Chapters/evaluation}
 \input{Chapters/conclusion}
-
+\blankPage
 % ******************************** Bibliography ************************************
 \bibliographystyle{unsrt}        
 \bibliography{References/references}
